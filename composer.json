@@ -1,0 +1,14 @@
+{
+    "name": "mihai-op/tic-tac-toe",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Mihai Oprea",
+            "email": "opreamihaialex@gmail.com"
+        }
+    ],
+    "require": {},
+	"autoload": {
+		"psr-4": {"TicTacToe\\": "src/"}
+	}
+}
