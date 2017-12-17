@@ -21,17 +21,17 @@ class Game {
         return $this->players[0];
     }
 
-    public function mark($row, $col) {
+    public function markOnBoard($row, $col) {
         $currentPlayer = $this->getPlayerAtTurn();
     
-        if( $this->board->notFull()) {
-            $this->board->markOnBoard($row, $col, $currentPlayer->getSymbol());
+        if( $this->board->notFull() && !$this->board->checkForWinner()) {
+            $this->board->mark($row, $col, $currentPlayer->getSymbol());
             $this->turnForO = !$this->turnForO;
 
             return;
         }
 
-        echo 'Cannot mark anymore.\n';
+        echo "Cannot mark anymore.\n";
     }
 
 
