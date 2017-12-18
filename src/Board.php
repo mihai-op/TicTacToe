@@ -4,12 +4,9 @@ namespace TicTacToe;
 
 class Board {
     private $table;
-    private $winningSymbol;
 
-    public function __construct($table = null) {
-        if(!isset($table)) {
-            $this->clear();
-        }
+    public function __construct() {
+        $this->clear();
     }
 
     public function clear()
@@ -20,153 +17,69 @@ class Board {
             }
         }
 
-        $this->winningSymbol = null;
+        return true;
+    }
+    
+    public function getTable() {
+        return $this->table;
     }
 
-    public function mark($vertical, $horizontal, $symbol) {
-        if($this->table[$horizontal][$vertical] == null && $this->notFull()) {
-            $this->table[$horizontal][$vertical] = $symbol;
+    public function getRow($row) {
+        return $this->table[$row];
+    }
 
-            if($this->checkForWinner()) {
-                $this->winningSymbol = $symbol;
-            }
+    public function getColumn($col) {
+        $column = [];
+
+        for($row = 0; $row < 3; $row++) {
+            $column[] = $this->table[$row][$col];
         }
+
+        return $column;
     }
 
-    public function notFull() {
+    public function getMainDiag() {
+        $diag = [];
+
+        for($index = 0; $index < 3; $index++) {
+            $diag[] = $this->table[$index][$index];
+        }
+
+        return $diag;
+    }
+
+    public function getSecondDiag() {
+        $diag = [];
+
+        for($index = 0; $index < 3; $index++) {
+            $diag[] = $this->table[$index][2 - $index];
+        }
+
+        return $diag;
+    }
+    
+    public function isFull() {
         for($row = 0; $row < 3; $row++) {
             for($col = 0; $col < 3; $col++) {
                 if($this->table[$row][$col] == null) {
-                    return true;
+                    return false;
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
-    public function display() {
-        for($row = 0; $row < 3; $row++) {
-            for($col = 0; $col < 3; $col++) {
-                if($this->table[$row][$col] == null) {
-                    echo ". ";
-                    continue;
-                }
-
-                echo $this->table[$row][$col] . " ";
-            }
-
-            echo "\n";
-        }
+    public function isCellEmpty($row, $col) {
+        return $this->table[$row][$col] == null;
     }
 
-    public function checkForWinner() {
-        if($this->winOnRows() || $this->winOnCols() || $this->winOnDiagonals()) {
-            return true;
-        }
-    }
-
-    public function winOnRows() {
-        $winningRow = null;
-
-        //check on rows
-        for($row = 0; $row < 3; $row++) {
-            $referenceSymbol = $this->table[$row][0];
-
-            $winner = true; //assume winner
-
-            for($col = 1; $col < 3; $col++) {
-                if($this->table[$row][$col] !== $referenceSymbol) {
-                    $winner = false; //refute winner
-                }
-            }
-
-            if($winner && $referenceSymbol !== null) {
-                $winningRow = $row;
-            }
-        }
-
-        if($winningRow !== null) {
+    public function mark($row, $col, $symbol) {
+        if($row >= 0 && $row < 3 && $col >= 0 && $col < 3) {
+            $this->table[$row][$col] = $symbol;
             return true;
         }
 
         return false;
-    }
-
-
-    public function winOnCols() {
-        $winningCol = null;
-
-        //check on cols
-        for($col = 0; $col < 3; $col++) {
-            $referenceSymbol = $this->table[$col][0];
-
-            $winner = true; //assume winner
-
-            for($row = 1; $row < 3; $row++) {
-                if($this->table[$row][$col] !== $referenceSymbol) {
-                    $winner = false; //refute winner
-                }
-            }
-
-            if($winner && $referenceSymbol !== null) {
-                $winningCol = $col;
-            }
-        }
-
-        if($winningCol !== null) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function winOnDiagonals() {
-        return $this->winOnFirstDiag() || $this->winOnSecondDiag();
-    }
-
-    public function winOnFirstDiag() {
-
-        $referenceSymbol = $this->table[0][0];
-        $winner = true;
-
-        //check first diag
-        for($index = 1; $index < 3; $index++) { 
-            if($this->table[$index][$index] !== $referenceSymbol) {
-                $winner = false;
-            }
-        }
-
-        if($winner && $referenceSymbol !== null) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function winOnSecondDiag() {
-
-        $referenceSymbol = $this->table[0][2];
-        $winner = true;
-
-        for($index = 1; $index < 3; $index++) { 
-            if($this->table[$index][2 - $index] !== $referenceSymbol) {
-                $winner = false;
-            }
-        }
-
-        if($winner && $referenceSymbol !== null) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function checkForDraw() {
-        return !$this->notFull() && !$this->checkForWinner();
-    }
-
-    public function getWinningSymbol() {
-        return $this->winningSymbol;
     }
 }

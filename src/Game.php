@@ -6,12 +6,14 @@ class Game {
     private $board;
     private $players;
     private $turnForSecondPlayer;
+    private $winningSymbol;
 
     public function __construct($turnForSecondPlayer = false) {
         $this->board = new Board;
 
         $this->players = [new Player('X'), new Player('O')];
         $this->turnForSecondPlayer = $turnForSecondPlayer;
+        $this->winningSymbol = null;
     }
 
     public function getPlayerAtTurn() {
@@ -24,37 +26,143 @@ class Game {
     public function markOnBoard($row, $col) {
         $currentPlayer = $this->getPlayerAtTurn();
     
-        if( $this->board->notFull() && !$this->board->checkForWinner()) {
+        if( $this->board->isCellEmpty($row, $col) && !$this->isVictory()) {
             $this->board->mark($row, $col, $currentPlayer->getSymbol());
             $this->turnForSecondPlayer = !$this->turnForSecondPlayer;
 
-            return;
-        }
-    }
+            if($this->isVictory()) {
+                $this->winningSymbol = $currentPlayer->getSymbol();
+            }
 
-    public function isDraw() {
-        return $this->board->checkForDraw();
+            return true;
+        }
+
+        return false;
     }
 
     public function isVictory() {
-        return $this->board->checkForWinner();
+        return $this->winOnRows() || $this->winOnCols() || $this->winOnDiagonals();
     }
 
     public function isXWinner() {
-        return $this->isVictory() && ($this->board->getWinningSymbol() === 'X');
+        return $this->isVictory() && ($this->getWinningSymbol() === 'X');
     }
     public function isOWinner() {
-        return $this->isVictory() && ($this->board->getWinningSymbol() === 'O');
-    }
-    public function displayBoard() {
-        $this->board->display();
+        return $this->isVictory() && ($this->getWinningSymbol() === 'O');
     }
 
-    public function clearBoard() {
-        $this->board->clear();
+    public static function startsWithO() {
+        return new Game(true);
     }
-
     public function getTurnForSecondPlayer() {
         return $this->turnForSecondPlayer;
+    }
+
+
+    public function isDraw() {
+        return $this->board->isFull() && !$this->isVictory();
+    }
+
+    public function winOnMainDiag() {
+        $mainDiag = $this->board->getMainDiag();
+
+        $referenceSymbol = $mainDiag[0];
+        $winner = true;
+
+        for($index = 1; $index < 3; $index++) {
+            if($mainDiag[$index] !== $referenceSymbol) {
+                $winner = false;
+            }
+        }
+
+        if($referenceSymbol !== null) {
+            return $winner;
+        }
+
+        return false;
+    }
+
+    public function winOnSecondDiag() {
+        $secondDiag = $this->board->getSecondDiag();
+
+        $referenceSymbol = $secondDiag[0];
+        $winner = true;
+
+        for($index = 1; $index < 3; $index++) { 
+            if($secondDiag[$index] !== $referenceSymbol) {
+                $winner = false;
+            }
+        }
+
+        if($referenceSymbol !== null) {
+            return $winner;
+        }
+
+        return false;
+    }
+
+    public function winOnDiagonals() {
+        return $this->winOnMainDiag() || $this->winOnSecondDiag();
+    }
+
+
+    public function winOnRows() {
+        $winningRow = null;
+
+        for($row = 0; $row < 3; $row++) {
+            $currentRow = $this->board->getRow($row);
+
+            $referenceSymbol = $currentRow[0];
+
+            $winner = true; //assume winner
+
+            for($col = 1; $col < 3; $col++) {
+                if($currentRow[$col] !== $referenceSymbol) {
+                    $winner = false; //refute winner
+                }
+            }
+
+            if($winner && $referenceSymbol !== null) {
+                $winningRow = $row;
+            }
+        }
+
+        if($winningRow !== null) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public function winOnCols() {
+        $winningCol = null;
+
+        for($col = 0; $col < 3; $col++) {
+            $currentCol = $this->board->getColumn($col);
+            $referenceSymbol = $currentCol[0];
+
+            $winner = true; //assume winner
+
+            for($row = 1; $row < 3; $row++) {
+                if($currentCol[$row] !== $referenceSymbol) {
+                    $winner = false; //refute winner
+                }
+            }
+
+            if($winner && $referenceSymbol !== null) {
+                $winningCol = $col;
+            }
+        }
+
+        if($winningCol !== null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getWinningSymbol() {
+        return $this->winningSymbol;
     }
 }

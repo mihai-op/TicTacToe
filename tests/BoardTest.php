@@ -5,79 +5,78 @@ use PHPUnit\Framework\TestCase;
 
 class BoardTest extends TestCase {
 
-    public function testWinOnFirstColumn() {
-
+    /**
+     * @test
+     */
+    public function fill_and_test_for_full() {
         $board = new Board;
 
-        $board->mark(0,0, 'X');
-        $board->mark(1,1, 'O');
-        $board->mark(0,1, 'X');
-        $board->mark(1,2, 'O');
-        $board->mark(0,2, 'X');
+        for($row = 0; $row < 3; $row++) {
+            for($col = 0; $col < 3; $col++) {
+                $board->mark($row, $col, 'X');
+            }
+        }
 
-        $this->assertEquals($board->winOnCols(), true);
-        $this->assertEquals($board->getWinningSymbol(), 'X');
+        $this->assertTrue($board->isFull());
     }
 
-    public function testWinOnFirstRow() {
-
+    /**
+     * @test
+     */
+    public function mark_and_verify_first_row() {
         $board = new Board;
 
         $board->mark(0,0, 'X');
-        $board->mark(1,1, 'O');
-        $board->mark(1,0, 'X');
-        $board->mark(1,2, 'O');
+        $board->mark(0,1, 'O');
+        $board->mark(0,2, 'X');
+
+        $firstRow = $board->getRow(0);
+
+        $this->assertEquals(['X','O','X'], $firstRow);
+    }
+
+    /**
+     * @test
+     */
+    public function mark_and_verify_first_column() {
+        $board = new Board;
+
+        $board->mark(0,0, 'X');
+        $board->mark(1,0, 'O');
         $board->mark(2,0, 'X');
 
-        $this->assertEquals($board->winOnRows(), true);
-        $this->assertEquals($board->getWinningSymbol(), 'X');
+        $firstColumn = $board->getColumn(0);
+
+        $this->assertEquals(['X','O','X'], $firstColumn);
     }
 
-    public function testWinOnFirstDiagonal() {
-
+    /**
+     * @test
+     */
+    public function mark_and_verify_main_diag() {
         $board = new Board;
 
         $board->mark(0,0, 'X');
-        $board->mark(0,1, 'O');
-        $board->mark(1,1, 'X');
-        $board->mark(1,2, 'O');
+        $board->mark(1,1, 'O');
         $board->mark(2,2, 'X');
 
-        $this->assertEquals($board->winOnFirstDiag(), true);
-        $this->assertEquals($board->winonDiagonals(), true);
-        $this->assertEquals($board->getWinningSymbol(), 'X');
+        $mainDiag = $board->getMainDiag();
+
+        $this->assertEquals(['X','O','X'], $mainDiag);
     }
 
-    public function testWinOnSecondDiagonal() {
-
+    /**
+     * @test
+     */
+    public function mark_and_verify_second_diag() {
         $board = new Board;
 
-        $board->mark(0,0, 'X');
-        $board->mark(0,2, 'O');
-        $board->mark(1,0, 'X');
-        $board->mark(1,1, 'O');
-        $board->mark(0,1, 'X');
-        $board->mark(2,0, 'O');
-
-        $this->assertEquals($board->winOnSecondDiag(), true);
-        $this->assertEquals($board->winonDiagonals(), true);
-        $this->assertEquals($board->getWinningSymbol(), 'O');
-    }
-
-    public function testDraw() {
-        $board = new Board;
-
-        $board->mark(1,1, 'O');
-        $board->mark(0,0, 'X');
-        $board->mark(2,2, 'O');
         $board->mark(0,2, 'X');
-        $board->mark(0,1, 'O');
-        $board->mark(2,1, 'X');
-        $board->mark(1,0, 'O');
-        $board->mark(1,2, 'X');
-        $board->mark(2,0, 'O');
+        $board->mark(1,1, 'O');
+        $board->mark(2,0, 'X');
 
-        $this->assertEquals($board->checkForDraw(), true);
-        $this->assertEquals($board->getWinningSymbol(), null);
+        $secondDiag = $board->getSecondDiag();
+
+        $this->assertEquals(['X','O','X'], $secondDiag);
     }
 }
