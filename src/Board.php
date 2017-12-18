@@ -4,6 +4,7 @@ namespace TicTacToe;
 
 class Board {
     private $table;
+    private $winningSymbol;
 
     public function __construct($table = null) {
         if(!isset($table)) {
@@ -18,11 +19,17 @@ class Board {
                 $this->table[$row][$col] = null;
             }
         }
+
+        $this->winningSymbol = null;
     }
 
     public function mark($vertical, $horizontal, $symbol) {
         if($this->table[$horizontal][$vertical] == null && $this->notFull()) {
             $this->table[$horizontal][$vertical] = $symbol;
+
+            if($this->checkForWinner()) {
+                $this->winningSymbol = $symbol;
+            }
         }
     }
 
@@ -80,7 +87,6 @@ class Board {
         }
 
         if($winningRow !== null) {
-            echo "row\n";
             return true;
         }
 
@@ -109,7 +115,6 @@ class Board {
         }
 
         if($winningCol !== null) {
-            echo "col\n";
             return true;
         }
 
@@ -155,5 +160,13 @@ class Board {
         }
 
         return false;
+    }
+
+    public function checkForDraw() {
+        return !$this->notFull() && !$this->checkForWinner();
+    }
+
+    public function getWinningSymbol() {
+        return $this->winningSymbol;
     }
 }

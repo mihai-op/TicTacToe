@@ -5,17 +5,17 @@ namespace TicTacToe;
 class Game {
     private $board;
     private $players;
-    private $turnForO;
+    private $turnForSecondPlayer;
 
-    public function __construct() {
+    public function __construct($turnForSecondPlayer = false) {
         $this->board = new Board;
 
         $this->players = [new Player('X'), new Player('O')];
-        $this->turnForO = false;
+        $this->turnForSecondPlayer = $turnForSecondPlayer;
     }
 
     public function getPlayerAtTurn() {
-        if($this->turnForO) {
+        if($this->turnForSecondPlayer) {
             return $this->players[1];
         }
         return $this->players[0];
@@ -26,15 +26,26 @@ class Game {
     
         if( $this->board->notFull() && !$this->board->checkForWinner()) {
             $this->board->mark($row, $col, $currentPlayer->getSymbol());
-            $this->turnForO = !$this->turnForO;
+            $this->turnForSecondPlayer = !$this->turnForSecondPlayer;
 
             return;
         }
-
-        echo "Cannot mark anymore.\n";
     }
 
+    public function isDraw() {
+        return $this->board->checkForDraw();
+    }
 
+    public function isVictory() {
+        return $this->board->checkForWinner();
+    }
+
+    public function isXWinner() {
+        return $this->isVictory() && ($this->board->getWinningSymbol() === 'X');
+    }
+    public function isOWinner() {
+        return $this->isVictory() && ($this->board->getWinningSymbol() === 'O');
+    }
     public function displayBoard() {
         $this->board->display();
     }
@@ -43,4 +54,7 @@ class Game {
         $this->board->clear();
     }
 
+    public function getTurnForSecondPlayer() {
+        return $this->turnForSecondPlayer;
+    }
 }
