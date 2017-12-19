@@ -39,11 +39,11 @@ class GameTest extends TestCase {
         $game = new Game('X');
 
         $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
-        $game->markOnBoard(1,1);
+        $game->takeTurn(1,1);
         $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
-        $game->markOnBoard(0,0);
+        $game->takeTurn(0,0);
         $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
-        $game->markOnBoard(2,2);
+        $game->takeTurn(2,2);
         $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
     }
 
@@ -54,7 +54,7 @@ class GameTest extends TestCase {
         $game = new Game('X');
 
         for($index = 0; $index < 7; $index++) {
-            $game->markOnBoard($index / 3, $index % 3);
+            $game->takeTurn($index / 3, $index % 3);
         }
 
         $this->assertEquals('X', $game->winner()->getSymbol());
@@ -67,7 +67,7 @@ class GameTest extends TestCase {
         $game = new Game('O'); 
 
         for($index = 0; $index < 7; $index++) {
-            $game->markOnBoard($index / 3, $index % 3);
+            $game->takeTurn($index / 3, $index % 3);
         }
 
         $this->assertEquals('O', $game->winner()->getSymbol());
@@ -79,11 +79,11 @@ class GameTest extends TestCase {
     public function win_on_first_row() {
         $game = new Game('X');
 
-        $game->markOnBoard(0,0);
-        $game->markOnBoard(1,1);
-        $game->markOnBoard(0,1);
-        $game->markOnBoard(1,2);
-        $game->markOnBoard(0,2);
+        $game->takeTurn(0,0);
+        $game->takeTurn(1,1);
+        $game->takeTurn(0,1);
+        $game->takeTurn(1,2);
+        $game->takeTurn(0,2);
 
         $this->assertEquals('X', $game->winner()->getSymbol());
     }
@@ -95,11 +95,11 @@ class GameTest extends TestCase {
 
         $game = new Game('X');
 
-        $game->markOnBoard(0,0);
-        $game->markOnBoard(1,1);
-        $game->markOnBoard(1,0);
-        $game->markOnBoard(1,2);
-        $game->markOnBoard(2,0);
+        $game->takeTurn(0,0);
+        $game->takeTurn(1,1);
+        $game->takeTurn(1,0);
+        $game->takeTurn(1,2);
+        $game->takeTurn(2,0);
 
         $this->assertEquals('X', $game->winner()->getSymbol());
     }
@@ -110,11 +110,11 @@ class GameTest extends TestCase {
     public function win_on_main_diagonal() {
         $game = new Game('X');
 
-        $game->markOnBoard(0,0);
-        $game->markOnBoard(0,1);
-        $game->markOnBoard(1,1);
-        $game->markOnBoard(1,2);
-        $game->markOnBoard(2,2);
+        $game->takeTurn(0,0);
+        $game->takeTurn(0,1);
+        $game->takeTurn(1,1);
+        $game->takeTurn(1,2);
+        $game->takeTurn(2,2);
 
         $this->assertEquals('X', $game->winner()->getSymbol());
     }
@@ -126,11 +126,11 @@ class GameTest extends TestCase {
 
         $game = new Game('X');
 
-        $game->markOnBoard(0,2);
-        $game->markOnBoard(0,1);
-        $game->markOnBoard(1,1);
-        $game->markOnBoard(1,2);
-        $game->markOnBoard(2,0);
+        $game->takeTurn(0,2);
+        $game->takeTurn(0,1);
+        $game->takeTurn(1,1);
+        $game->takeTurn(1,2);
+        $game->takeTurn(2,0);
 
         $this->assertEquals('X', $game->winner()->getSymbol());
     }
@@ -140,15 +140,15 @@ class GameTest extends TestCase {
     public function draw_starting_with_x() {
         $game = new Game('X');
 
-        $game->markOnBoard(1,1);
-        $game->markOnBoard(0,0);
-        $game->markOnBoard(2,2);
-        $game->markOnBoard(0,2);
-        $game->markOnBoard(0,1);
-        $game->markOnBoard(2,1);
-        $game->markOnBoard(1,0);
-        $game->markOnBoard(1,2);
-        $game->markOnBoard(2,0);
+        $game->takeTurn(1,1);
+        $game->takeTurn(0,0);
+        $game->takeTurn(2,2);
+        $game->takeTurn(0,2);
+        $game->takeTurn(0,1);
+        $game->takeTurn(2,1);
+        $game->takeTurn(1,0);
+        $game->takeTurn(1,2);
+        $game->takeTurn(2,0);
 
         $this->assertEquals(null, $game->winner());
     }
@@ -159,15 +159,15 @@ class GameTest extends TestCase {
     public function draw_starting_with_o() {
         $game = new Game('O');
 
-        $game->markOnBoard(1,1);
-        $game->markOnBoard(0,0);
-        $game->markOnBoard(2,2);
-        $game->markOnBoard(0,2);
-        $game->markOnBoard(0,1);
-        $game->markOnBoard(2,1);
-        $game->markOnBoard(1,0);
-        $game->markOnBoard(1,2);
-        $game->markOnBoard(2,0);
+        $game->takeTurn(1,1);
+        $game->takeTurn(0,0);
+        $game->takeTurn(2,2);
+        $game->takeTurn(0,2);
+        $game->takeTurn(0,1);
+        $game->takeTurn(2,1);
+        $game->takeTurn(1,0);
+        $game->takeTurn(1,2);
+        $game->takeTurn(2,0);
 
         $this->assertEquals(null, $game->winner());
     }

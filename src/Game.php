@@ -7,11 +7,13 @@ class Game {
     private $board;
     private $players;
     private $playerAtTurn;
-    private $winningSymbol;
 
     public function __construct($startingSymbol) {
         $this->board = new Board;
         $this->players = [new Player('X'), new Player('O')];
+
+        $this->players[0]->setGame($this);
+        $this->players[1]->setGame($this);
 
         if($startingSymbol === 'X') {
             $this->playerAtTurn = $this->players[0];
@@ -30,15 +32,12 @@ class Game {
         return $this->playerAtTurn;
     }
 
-    public function markOnBoard($row, $col) {
+    public function takeTurn($row, $col) {
         $currentPlayer = $this->playerAtTurn;
 
         if($this->board->isCellEmpty($row, $col))  {
-            $this->board->mark($row, $col, $currentPlayer->getSymbol());
+            $this->playerAtTurn->markTile($row, $col, $currentPlayer->getSymbol());
 
-            if($this->winner() !== null) {
-                $this->winningSymbol = $currentPlayer->getSymbol();
-            }
             if($this->playerAtTurn->getSymbol() === 'X') {
                 $this->playerAtTurn = $this->players[1];
             }
@@ -74,6 +73,10 @@ class Game {
         return null;
     }
 
+
+    public function getBoard() {
+        return $this->board;
+    }
     //this function returns NULL both when:
     //$line = [null, null, null]
     //$line = ['X','O','X']
