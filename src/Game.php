@@ -1,49 +1,51 @@
 <?php
 
 namespace TicTacToe;
+use TicTacToe\Exception\WrongSymbolException;
 
 class Game {
     private $board;
     private $players;
-    private $turnForSecondPlayer;
+    private $playerAtTurn;
     private $winningSymbol;
 
     public function __construct($startingSymbol) {
         $this->board = new Board;
-
         $this->players = [new Player('X'), new Player('O')];
+
         if($startingSymbol === 'X') {
-            $this->turnForSecondPlayer = false;
+            $this->playerAtTurn = $this->players[0];
         }
         else if($startingSymbol === 'O') {
-            $this->turnForSecondPlayer = true;
+            $this->playerAtTurn = $this->players[1];
         }
-
-        $this->winningSymbol = null;
+        else {
+            throw new WrongSymbolException(
+                "Can only start with X or O."
+            );
+        }
     }
 
     public function getPlayerAtTurn() {
-        if($this->turnForSecondPlayer) {
-            return $this->players[1];
-        }
-        return $this->players[0];
+        return $this->playerAtTurn;
     }
 
     public function markOnBoard($row, $col) {
-        $currentPlayer = $this->getPlayerAtTurn();
-    
-        if( $this->board->isCellEmpty($row, $col) && !$this->isVictory()) {
+        $currentPlayer = $this->playerAtTurn;
+
+        if($this->board->isCellEmpty($row, $col))  {
             $this->board->mark($row, $col, $currentPlayer->getSymbol());
-            $this->turnForSecondPlayer = !$this->turnForSecondPlayer;
 
             if($this->isVictory()) {
                 $this->winningSymbol = $currentPlayer->getSymbol();
             }
-
-            return true;
+            if($this->playerAtTurn->getSymbol() === 'X') {
+                $this->playerAtTurn = $this->players[1];
+            }
+            else {
+                $this->playerAtTurn = $this->players[0];
+            }
         }
-
-        return false;
     }
 
     public function winner() {
@@ -58,10 +60,6 @@ class Game {
         return null;
     }
 
-    public function getTurnForSecondPlayer() {
-        return $this->turnForSecondPlayer;
-    }
-
     private function isVictory() {
         return $this->winOnRows() || $this->winOnCols() || $this->winOnDiagonals();
     }
@@ -73,8 +71,6 @@ class Game {
     private function isOWinner() {
         return $this->isVictory() && ($this->getWinningSymbol() === 'O');
     }
-
-
 
     private function isDraw() {
         return $this->board->isFull() && !$this->isVictory();

@@ -2,20 +2,49 @@
 
 use PHPUnit\Framework\TestCase;
 use TicTacToe\Game;
+use TicTacToe\Exception\WrongSymbolException;
 
 class GameTest extends TestCase {
 
     /**
      * @test
-     */
-    public function turn_for_second_player_during_first_3_moves() {
+     * */
+    public function start_with_x() {
         $game = new Game('X');
 
-        $this->assertFalse($game->getTurnForSecondPlayer());
+        $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
+    }
+    /**
+     * @test
+     * */
+    public function start_with_o() {
+        $game = new Game('O');
+
+        $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
+    }
+
+    /**
+     * @test
+     * */
+    public function start_with_illegal_symbol() {
+        $this->expectException(WrongSymbolException::class);
+
+        $game = new Game('ZZZ');
+    }
+
+    /**
+     * @test
+     */
+    public function player_at_turn_during_first_3_moves() {
+        $game = new Game('X');
+
+        $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
+        $game->markOnBoard(1,1);
+        $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
         $game->markOnBoard(0,0);
-        $this->assertTrue($game->getTurnForSecondPlayer());
-        $game->markOnBoard(0,1);
-        $this->assertFalse($game->getTurnForSecondPlayer());
+        $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
+        $game->markOnBoard(2,2);
+        $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
     }
 
     /**
