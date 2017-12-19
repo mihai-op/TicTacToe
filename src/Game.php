@@ -8,11 +8,17 @@ class Game {
     private $turnForSecondPlayer;
     private $winningSymbol;
 
-    public function __construct($turnForSecondPlayer = false) {
+    public function __construct($startingSymbol) {
         $this->board = new Board;
 
         $this->players = [new Player('X'), new Player('O')];
-        $this->turnForSecondPlayer = $turnForSecondPlayer;
+        if($startingSymbol === 'X') {
+            $this->turnForSecondPlayer = false;
+        }
+        else if($startingSymbol === 'O') {
+            $this->turnForSecondPlayer = true;
+        }
+
         $this->winningSymbol = null;
     }
 
@@ -51,9 +57,6 @@ class Game {
         return $this->isVictory() && ($this->getWinningSymbol() === 'O');
     }
 
-    public static function startsWithO() {
-        return new Game(true);
-    }
     public function getTurnForSecondPlayer() {
         return $this->turnForSecondPlayer;
     }
