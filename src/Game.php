@@ -63,14 +63,14 @@ class Game {
         return $this->board->isFull() && !$this->isVictory();
     }
 
-    public function winOnMainDiag() {
-        $mainDiag = $this->board->getMainDiag();
+    public function winOnMainDiagonal() {
+        $mainDiagonal = $this->board->getMainDiagonal();
 
-        $referenceSymbol = $mainDiag[0];
+        $referenceSymbol = $mainDiagonal[0];
         $winner = true;
 
         for($index = 1; $index < 3; $index++) {
-            if($mainDiag[$index] !== $referenceSymbol) {
+            if($mainDiagonal[$index] !== $referenceSymbol) {
                 $winner = false;
             }
         }
@@ -82,14 +82,14 @@ class Game {
         return false;
     }
 
-    public function winOnSecondDiag() {
-        $secondDiag = $this->board->getSecondDiag();
+    public function winOnSecondaryDiagonal() {
+        $secondaryDiag = $this->board->getSecondaryDiagonal();
 
-        $referenceSymbol = $secondDiag[0];
+        $referenceSymbol = $secondaryDiag[0];
         $winner = true;
 
         for($index = 1; $index < 3; $index++) { 
-            if($secondDiag[$index] !== $referenceSymbol) {
+            if($secondaryDiag[$index] !== $referenceSymbol) {
                 $winner = false;
             }
         }
@@ -102,7 +102,7 @@ class Game {
     }
 
     public function winOnDiagonals() {
-        return $this->winOnMainDiag() || $this->winOnSecondDiag();
+        return $this->winOnMainDiagonal() || $this->winOnSecondaryDiagonal();
     }
 
 

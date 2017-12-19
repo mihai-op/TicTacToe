@@ -2,8 +2,11 @@
 
 use TicTacToe\Board;
 use PHPUnit\Framework\TestCase;
+use TicTacToe\Exception\ArgumentOutOfRangeException;
+use TicTacToe\Exception\WrongSymbolException;
 
 class BoardTest extends TestCase {
+
 
     /**
      * @test
@@ -19,6 +22,77 @@ class BoardTest extends TestCase {
 
         $this->assertTrue($board->isFull());
     }
+
+    /**
+     * @test
+     */
+    public function get_negative_row() {
+        $board = new Board;
+
+        $this->expectException(ArgumentOutOfRangeException::class);
+        $board->getRow(-1);
+    }
+
+    /**
+     * @test
+     */
+    public function get_row_larger_than_board_size() {
+        $board = new Board;
+
+        $this->expectException(ArgumentOutOfRangeException::class);
+        $board->getRow(3);
+    }
+
+    /**
+     * @test
+     */
+    public function get_negative_column() {
+        $board = new Board;
+
+        $this->expectException(ArgumentOutOfRangeException::class);
+        $board->getColumn(-1);
+    }
+
+    /**
+     * @test
+     */
+    public function get_column_larger_than_board_size() {
+        $board = new Board;
+
+        $this->expectException(ArgumentOutOfRangeException::class);
+        $board->getColumn(3);
+    }
+
+    /**
+     * @test
+     */
+    public function test_empty_cell_with_wrong_index() {
+        $board = new Board;
+
+        $this->expectException(ArgumentOutOfRangeException::class);
+        $returnValue = $board->isCellEmpty(-1,0);
+    }
+
+
+    /**
+     * @test
+     */
+    public function mark_with_wrong_index() {
+        $board = new Board;
+
+        $this->expectException(ArgumentOutOfRangeException::class);
+        $board->mark(-1,0, 'X');
+    }
+
+    /**
+     * @test
+     */
+    public function mark_with_wrong_symbol() {
+        $board = new Board;
+
+        $this->expectException(WrongSymbolException::class);
+        $board->mark(0,0,'Z');
+    } 
 
     /**
      * @test
@@ -53,14 +127,14 @@ class BoardTest extends TestCase {
     /**
      * @test
      */
-    public function mark_and_verify_main_diag() {
+    public function mark_and_verify_main_diagonal() {
         $board = new Board;
 
         $board->mark(0,0, 'X');
         $board->mark(1,1, 'O');
         $board->mark(2,2, 'X');
 
-        $mainDiag = $board->getMainDiag();
+        $mainDiag = $board->getMainDiagonal();
 
         $this->assertEquals(['X','O','X'], $mainDiag);
     }
@@ -68,15 +142,14 @@ class BoardTest extends TestCase {
     /**
      * @test
      */
-    public function mark_and_verify_second_diag() {
+    public function mark_and_verify_secondary_diagonal() {
         $board = new Board;
 
         $board->mark(0,2, 'X');
         $board->mark(1,1, 'O');
         $board->mark(2,0, 'X');
 
-        $secondDiag = $board->getSecondDiag();
-
-        $this->assertEquals(['X','O','X'], $secondDiag);
+        $secondaryDiagonal = $board->getSecondaryDiagonal();
+        $this->assertEquals(['X','O','X'], $secondaryDiagonal);
     }
 }

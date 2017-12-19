@@ -1,6 +1,8 @@
 <?php
 
 namespace TicTacToe;
+use TicTacToe\Exception\ArgumentOutOfRangeException;
+use TicTacToe\Exception\WrongSymbolException;
 
 class Board {
     private $table;
@@ -24,44 +26,53 @@ class Board {
         return $this->table;
     }
 
-    public function getRow($row) {
-        return $this->table[$row];
-    }
-
-    public function getColumn($col) {
-        $column = [];
-
-        for($row = 0; $row < 3; $row++) {
-            $column[] = $this->table[$row][$col];
+    public function getRow($rowIndex) {
+        if($rowIndex < 0 || $rowIndex >= 3) {
+            throw new ArgumentOutOfRangeException("Invalid row.");
         }
 
-        return $column;
+        $rowArray = $this->table[$rowIndex];
+        return $rowArray;
     }
 
-    public function getMainDiag() {
-        $diag = [];
+    public function getColumn($columnIndex) {
+        if($columnIndex < 0 || $columnIndex >= 3) {
+            throw new ArgumentOutOfRangeException("Invalid column.");
+        }
+
+        $columnArray = [];
+
+        for($rowIndex = 0; $rowIndex < 3; $rowIndex++) {
+            $columnArray[] = $this->table[$rowIndex][$columnIndex];
+        }
+
+        return $columnArray;
+    }
+
+    public function getMainDiagonal() {
+        $diagonalArray = [];
 
         for($index = 0; $index < 3; $index++) {
-            $diag[] = $this->table[$index][$index];
+            $diagonalArray[] = $this->table[$index][$index];
         }
 
-        return $diag;
+        return $diagonalArray;
     }
 
-    public function getSecondDiag() {
-        $diag = [];
+    public function getSecondaryDiagonal() {
+        $diagonalArray = [];
 
         for($index = 0; $index < 3; $index++) {
-            $diag[] = $this->table[$index][2 - $index];
+            $diagonalArray[] = $this->table[$index][2 - $index];
         }
 
-        return $diag;
+        return $diagonalArray;
     }
     
     public function isFull() {
-        for($row = 0; $row < 3; $row++) {
-            for($col = 0; $col < 3; $col++) {
-                if($this->table[$row][$col] == null) {
+        for($rowIndex = 0; $rowIndex < 3; $rowIndex++) {
+            for($columnIndex = 0; $columnIndex < 3; $columnIndex++) {
+                if($this->table[$rowIndex][$columnIndex] == null) {
                     return false;
                 }
             }
@@ -70,16 +81,25 @@ class Board {
         return true;
     }
 
-    public function isCellEmpty($row, $col) {
-        return $this->table[$row][$col] == null;
+    public function isCellEmpty($rowIndex, $columnIndex) {
+        if($rowIndex < 0 || $rowIndex >= 3 || 
+            $columnIndex < 0 || $columnIndex >= 3) {
+            throw new ArgumentOutOfRangeException("Invalid row or column.");
+        }
+
+        return $this->table[$rowIndex][$columnIndex] == null;
     }
 
     public function mark($row, $col, $symbol) {
+        if($symbol !== 'O' && $symbol !== 'X') {
+            throw new WrongSymbolException("Symbol is not X or O.");
+        }
+
         if($row >= 0 && $row < 3 && $col >= 0 && $col < 3) {
             $this->table[$row][$col] = $symbol;
             return true;
         }
 
-        return false;
+        throw new ArgumentOutOfRangeException("Invalid row or column.");
     }
 }

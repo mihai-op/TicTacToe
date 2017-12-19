@@ -30,8 +30,8 @@ class GameTest extends TestCase {
 
         $this->assertFalse($game->winOnRows());
         $this->assertFalse($game->winOnCols());
-        $this->assertFalse($game->winOnMainDiag());
-        $this->assertTrue($game->winOnSecondDiag());
+        $this->assertFalse($game->winOnMainDiagonal());
+        $this->assertTrue($game->winOnSecondaryDiagonal());
         $this->assertTrue($game->isVictory());
         $this->assertEquals('X', $game->getWinningSymbol());
         $this->assertTrue($game->isXWinner());
@@ -49,8 +49,8 @@ class GameTest extends TestCase {
 
         $this->assertFalse($game->winOnRows());
         $this->assertFalse($game->winOnCols());
-        $this->assertFalse($game->winOnMainDiag());
-        $this->assertTrue($game->winOnSecondDiag());
+        $this->assertFalse($game->winOnMainDiagonal());
+        $this->assertTrue($game->winOnSecondaryDiagonal());
         $this->assertTrue($game->isVictory());
         $this->assertEquals('O', $game->getWinningSymbol());
         $this->assertTrue($game->isOWinner());
@@ -92,8 +92,7 @@ class GameTest extends TestCase {
     /**
      * @test
      */
-    public function win_on_main_diag() {
-
+    public function win_on_main_diagonal() {
         $game = new Game;
 
         $game->markOnBoard(0,0);
@@ -102,7 +101,7 @@ class GameTest extends TestCase {
         $game->markOnBoard(1,2);
         $game->markOnBoard(2,2);
 
-        $this->assertTrue($game->winOnMainDiag());
+        $this->assertTrue($game->winOnMainDiagonal());
         $this->assertTrue($game->winOnDiagonals());
         $this->assertEquals('X', $game->getWinningSymbol());
     }
@@ -110,7 +109,7 @@ class GameTest extends TestCase {
     /**
      * @test
      */
-    public function win_on_second_diag() {
+    public function win_on_secondary_diagonal() {
 
         $game = new Game;
 
@@ -120,7 +119,7 @@ class GameTest extends TestCase {
         $game->markOnBoard(1,2);
         $game->markOnBoard(2,0);
 
-        $this->assertTrue($game->winOnSecondDiag());
+        $this->assertTrue($game->winOnSecondaryDiagonal());
         $this->assertTrue($game->winOnDiagonals());
         $this->assertEquals('X', $game->getWinningSymbol());
     }
@@ -142,8 +141,8 @@ class GameTest extends TestCase {
 
         $this->assertFalse($game->winOnRows());
         $this->assertFalse($game->winOnCols());
-        $this->assertFalse($game->winOnMainDiag());
-        $this->assertFalse($game->winOnSecondDiag());
+        $this->assertFalse($game->winOnMainDiagonal());
+        $this->assertFalse($game->winOnSecondaryDiagonal());
         $this->assertFalse($game->isVictory());
         $this->assertTrue($game->isDraw());
         $this->assertEquals(null, $game->getWinningSymbol());
@@ -167,8 +166,8 @@ class GameTest extends TestCase {
 
         $this->assertFalse($game->winOnRows());
         $this->assertFalse($game->winOnCols());
-        $this->assertFalse($game->winOnMainDiag());
-        $this->assertFalse($game->winOnSecondDiag());
+        $this->assertFalse($game->winOnMainDiagonal());
+        $this->assertFalse($game->winOnSecondaryDiagonal());
         $this->assertFalse($game->isVictory());
         $this->assertTrue($game->isDraw());
         $this->assertEquals(null, $game->getWinningSymbol());
