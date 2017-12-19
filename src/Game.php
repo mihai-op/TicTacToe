@@ -36,7 +36,7 @@ class Game {
         if($this->board->isCellEmpty($row, $col))  {
             $this->board->mark($row, $col, $currentPlayer->getSymbol());
 
-            if($this->isVictory()) {
+            if($this->winner() !== null) {
                 $this->winningSymbol = $currentPlayer->getSymbol();
             }
             if($this->playerAtTurn->getSymbol() === 'X') {
@@ -49,133 +49,40 @@ class Game {
     }
 
     public function winner() {
-        if($this->isXWinner()) {
-            return $this->players[0];
+        $lineStats = [];
+
+        for($row = 0; $row < 3; $row++) {
+            $lineStats[] = $this->sameSymbolOnLine($this->board->getRow($row));
         }
 
-        if($this->isOWinner()) {
-            return $this->players[1];
+        for($column = 0; $column < 3; $column++) {
+            $lineStats[] = $this->sameSymbolOnLine($this->board->getColumn($column));
+        }
+
+        $lineStats[] = $this->sameSymbolOnLine($this->board->getMainDiagonal());
+        $lineStats[] = $this->sameSymbolOnLine($this->board->getSecondaryDiagonal());
+
+        for($index = 0; $index < count($lineStats); $index++) {
+            if($lineStats[$index] === 'X') {
+                return $this->players[0];
+            }
+            else if($lineStats[$index] === 'O') {
+                return $this->players[1];
+            }
         }
 
         return null;
     }
 
-    private function isVictory() {
-        return $this->winOnRows() || $this->winOnCols() || $this->winOnDiagonals();
-    }
-
-    private function isXWinner() {
-        return $this->isVictory() && ($this->getWinningSymbol() === 'X');
-    }
-
-    private function isOWinner() {
-        return $this->isVictory() && ($this->getWinningSymbol() === 'O');
-    }
-
-    private function isDraw() {
-        return $this->board->isFull() && !$this->isVictory();
-    }
-
-    private function winOnMainDiagonal() {
-        $mainDiagonal = $this->board->getMainDiagonal();
-
-        $referenceSymbol = $mainDiagonal[0];
-        $winner = true;
-
-        for($index = 1; $index < 3; $index++) {
-            if($mainDiagonal[$index] !== $referenceSymbol) {
-                $winner = false;
-            }
+    //this function returns NULL both when:
+    //$line = [null, null, null]
+    //$line = ['X','O','X']
+    //might need a fix if it does not work out well
+    private function sameSymbolOnLine($line) {
+        if(count(array_unique($line)) === 1) {
+            return $line[0];
         }
 
-        if($referenceSymbol !== null) {
-            return $winner;
-        }
-
-        return false;
-    }
-
-    private function winOnSecondaryDiagonal() {
-        $secondaryDiag = $this->board->getSecondaryDiagonal();
-
-        $referenceSymbol = $secondaryDiag[0];
-        $winner = true;
-
-        for($index = 1; $index < 3; $index++) { 
-            if($secondaryDiag[$index] !== $referenceSymbol) {
-                $winner = false;
-            }
-        }
-
-        if($referenceSymbol !== null) {
-            return $winner;
-        }
-
-        return false;
-    }
-
-    private function winOnDiagonals() {
-        return $this->winOnMainDiagonal() || $this->winOnSecondaryDiagonal();
-    }
-
-
-    private function winOnRows() {
-        $winningRow = null;
-
-        for($row = 0; $row < 3; $row++) {
-            $currentRow = $this->board->getRow($row);
-
-            $referenceSymbol = $currentRow[0];
-
-            $winner = true; //assume winner
-
-            for($col = 1; $col < 3; $col++) {
-                if($currentRow[$col] !== $referenceSymbol) {
-                    $winner = false; //refute winner
-                }
-            }
-
-            if($winner && $referenceSymbol !== null) {
-                $winningRow = $row;
-            }
-        }
-
-        if($winningRow !== null) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-    private function winOnCols() {
-        $winningCol = null;
-
-        for($col = 0; $col < 3; $col++) {
-            $currentCol = $this->board->getColumn($col);
-            $referenceSymbol = $currentCol[0];
-
-            $winner = true; //assume winner
-
-            for($row = 1; $row < 3; $row++) {
-                if($currentCol[$row] !== $referenceSymbol) {
-                    $winner = false; //refute winner
-                }
-            }
-
-            if($winner && $referenceSymbol !== null) {
-                $winningCol = $col;
-            }
-        }
-
-        if($winningCol !== null) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function getWinningSymbol() {
-        return $this->winningSymbol;
+        return null;
     }
 }
