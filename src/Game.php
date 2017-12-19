@@ -58,6 +58,10 @@ class Game {
         return null;
     }
 
+    public function getTurnForSecondPlayer() {
+        return $this->turnForSecondPlayer;
+    }
+
     private function isVictory() {
         return $this->winOnRows() || $this->winOnCols() || $this->winOnDiagonals();
     }
@@ -70,16 +74,13 @@ class Game {
         return $this->isVictory() && ($this->getWinningSymbol() === 'O');
     }
 
-    public function getTurnForSecondPlayer() {
-        return $this->turnForSecondPlayer;
-    }
 
 
-    public function isDraw() {
+    private function isDraw() {
         return $this->board->isFull() && !$this->isVictory();
     }
 
-    public function winOnMainDiagonal() {
+    private function winOnMainDiagonal() {
         $mainDiagonal = $this->board->getMainDiagonal();
 
         $referenceSymbol = $mainDiagonal[0];
@@ -98,7 +99,7 @@ class Game {
         return false;
     }
 
-    public function winOnSecondaryDiagonal() {
+    private function winOnSecondaryDiagonal() {
         $secondaryDiag = $this->board->getSecondaryDiagonal();
 
         $referenceSymbol = $secondaryDiag[0];
@@ -117,12 +118,12 @@ class Game {
         return false;
     }
 
-    public function winOnDiagonals() {
+    private function winOnDiagonals() {
         return $this->winOnMainDiagonal() || $this->winOnSecondaryDiagonal();
     }
 
 
-    public function winOnRows() {
+    private function winOnRows() {
         $winningRow = null;
 
         for($row = 0; $row < 3; $row++) {
@@ -151,7 +152,7 @@ class Game {
     }
 
 
-    public function winOnCols() {
+    private function winOnCols() {
         $winningCol = null;
 
         for($col = 0; $col < 3; $col++) {
