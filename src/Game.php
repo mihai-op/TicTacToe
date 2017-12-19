@@ -5,44 +5,43 @@ use TicTacToe\Exception\WrongSymbolException;
 
 class Game {
     private $board;
-    private $players;
+    private $firstPlayer;
+    private $secondPlayer;
+
     private $playerAtTurn;
 
-    public function __construct($startingSymbol) {
+    public function __construct($firstPlayer, $secondPlayer, $symbols = ['X','O']) {
         $this->board = new Board;
-        $this->players = [new Player('X'), new Player('O')];
 
-        $this->players[0]->setGame($this);
-        $this->players[1]->setGame($this);
+        $this->firstPlayer = $firstPlayer;
+        $this->secondPlayer = $secondPlayer;
 
-        if($startingSymbol === 'X') {
-            $this->playerAtTurn = $this->players[0];
-        }
-        else if($startingSymbol === 'O') {
-            $this->playerAtTurn = $this->players[1];
-        }
-        else {
-            throw new WrongSymbolException(
-                "Can only start with X or O."
-            );
-        }
+        $this->firstPlayer->setGame($this);
+        $this->secondPlayer->setGame($this);
+
+        $this->firstPlayer->setSymbol($symbols[0]);
+        $this->secondPlayer->setSymbol($symbols[1]);
+
+        $this->playerAtTurn = $firstPlayer;
     }
+
 
     public function getPlayerAtTurn() {
         return $this->playerAtTurn;
     }
 
-    public function takeTurn($row, $col) {
+    public function takeTurn($row, $column) {
         $currentPlayer = $this->playerAtTurn;
 
-        if($this->board->isCellEmpty($row, $col))  {
-            $this->playerAtTurn->markTile($row, $col, $currentPlayer->getSymbol());
+        if($this->board->isCellEmpty($row, $column))  {
+            $this->playerAtTurn->markTile($row, $column, $currentPlayer->getSymbol());
 
-            if($this->playerAtTurn->getSymbol() === 'X') {
-                $this->playerAtTurn = $this->players[1];
+            //I need to find a better way to compare objects
+            if($this->playerAtTurn->getSymbol() === $this->firstPlayer->getSymbol()) {
+                $this->playerAtTurn = $this->secondPlayer;
             }
             else {
-                $this->playerAtTurn = $this->players[0];
+                $this->playerAtTurn = $this->firstPlayer;
             }
         }
     }
@@ -62,11 +61,11 @@ class Game {
         $lineStats[] = $this->sameSymbolOnLine($this->board->getSecondaryDiagonal());
 
         for($index = 0; $index < count($lineStats); $index++) {
-            if($lineStats[$index] === 'X') {
-                return $this->players[0];
+            if($lineStats[$index] === $this->firstPlayer->getSymbol()) {
+                return $this->firstPlayer;
             }
-            else if($lineStats[$index] === 'O') {
-                return $this->players[1];
+            else if($lineStats[$index] === $this->secondPlayer->getSymbol()) {
+                return $this->secondPlayer;
             }
         }
 

@@ -2,56 +2,48 @@
 
 use PHPUnit\Framework\TestCase;
 use TicTacToe\Game;
-use TicTacToe\Exception\WrongSymbolException;
+use TicTacToe\Player;
 
 class GameTest extends TestCase {
 
+    public $game;
+    public $players;
+
+    public function setUp() {
+
+        //using implicit symbols ['X','O']
+        $this->game = new Game(new Player(), new Player());
+    }
+
     /**
      * @test
      * */
-    public function start_with_x() {
-        $game = new Game('X');
+    public function start_a_game() {
+        $game = &$this->game;
 
         $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
-    }
-    /**
-     * @test
-     * */
-    public function start_with_o() {
-        $game = new Game('O');
-
-        $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
-    }
-
-    /**
-     * @test
-     * */
-    public function start_with_illegal_symbol() {
-        $this->expectException(WrongSymbolException::class);
-
-        $game = new Game('ZZZ');
     }
 
     /**
      * @test
      */
     public function player_at_turn_during_first_3_moves() {
-        $game = new Game('X');
+        $game = &$this->game;
 
         $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
-        $game->takeTurn(1,1);
+        $this->game->takeTurn(1,1);
         $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
-        $game->takeTurn(0,0);
+        $this->game->takeTurn(0,0);
         $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
-        $game->takeTurn(2,2);
+        $this->game->takeTurn(2,2);
         $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
     }
 
     /**
      * @test
      */
-    public function win_for_x() {
-        $game = new Game('X');
+    public function win_for_first_player() {
+        $game = &$this->game;
 
         for($index = 0; $index < 7; $index++) {
             $game->takeTurn($index / 3, $index % 3);
@@ -63,112 +55,49 @@ class GameTest extends TestCase {
     /**
      * @test
      */
-    public function win_for_o() {
-        $game = new Game('O'); 
+    public function test_draw() {
+        $game = &$this->game;
 
-        for($index = 0; $index < 7; $index++) {
-            $game->takeTurn($index / 3, $index % 3);
-        }
+        $game->takeTurn(1,1);
+        $game->takeTurn(0,0);
+        $game->takeTurn(2,2);
+        $game->takeTurn(0,2);
+        $game->takeTurn(0,1);
+        $game->takeTurn(2,1);
+        $game->takeTurn(1,0);
+        $game->takeTurn(1,2);
+        $game->takeTurn(2,0);
+
+        $this->assertEquals(null, $game->winner());
+    }
+
+    /**
+     * @test
+     */
+    public function win_for_second_player() {
+        $game = &$this->game;
+
+        $game->takeTurn(0,1);
+        $game->takeTurn(0,0);
+        $game->takeTurn(1,2);
+        $game->takeTurn(1,1);
+        $game->takeTurn(2,1);
+        $game->takeTurn(2,2);
 
         $this->assertEquals('O', $game->winner()->getSymbol());
     }
 
     /**
      * @test
-     */
-    public function win_on_first_row() {
-        $game = new Game('X');
+     * */
+    public function reverse_player_order() {
+        $game = new Game(new Player(), new Player(), ['O','X']);
 
-        $game->takeTurn(0,0);
-        $game->takeTurn(1,1);
-        $game->takeTurn(0,1);
-        $game->takeTurn(1,2);
-        $game->takeTurn(0,2);
+        for($index = 0; $index < 7; $index++) {
+            $game->takeTurn($index / 3, $index % 3);
+        }
 
-        $this->assertEquals('X', $game->winner()->getSymbol());
-    }
-
-    /**
-     * @test
-     */
-    public function win_on_first_column() {
-
-        $game = new Game('X');
-
-        $game->takeTurn(0,0);
-        $game->takeTurn(1,1);
-        $game->takeTurn(1,0);
-        $game->takeTurn(1,2);
-        $game->takeTurn(2,0);
-
-        $this->assertEquals('X', $game->winner()->getSymbol());
-    }
-
-    /**
-     * @test
-     */
-    public function win_on_main_diagonal() {
-        $game = new Game('X');
-
-        $game->takeTurn(0,0);
-        $game->takeTurn(0,1);
-        $game->takeTurn(1,1);
-        $game->takeTurn(1,2);
-        $game->takeTurn(2,2);
-
-        $this->assertEquals('X', $game->winner()->getSymbol());
-    }
-
-    /**
-     * @test
-     */
-    public function win_on_secondary_diagonal() {
-
-        $game = new Game('X');
-
-        $game->takeTurn(0,2);
-        $game->takeTurn(0,1);
-        $game->takeTurn(1,1);
-        $game->takeTurn(1,2);
-        $game->takeTurn(2,0);
-
-        $this->assertEquals('X', $game->winner()->getSymbol());
-    }
-    /**
-     * @test
-     */
-    public function draw_starting_with_x() {
-        $game = new Game('X');
-
-        $game->takeTurn(1,1);
-        $game->takeTurn(0,0);
-        $game->takeTurn(2,2);
-        $game->takeTurn(0,2);
-        $game->takeTurn(0,1);
-        $game->takeTurn(2,1);
-        $game->takeTurn(1,0);
-        $game->takeTurn(1,2);
-        $game->takeTurn(2,0);
-
-        $this->assertEquals(null, $game->winner());
-    }
-
-    /**
-     * @test
-     */
-    public function draw_starting_with_o() {
-        $game = new Game('O');
-
-        $game->takeTurn(1,1);
-        $game->takeTurn(0,0);
-        $game->takeTurn(2,2);
-        $game->takeTurn(0,2);
-        $game->takeTurn(0,1);
-        $game->takeTurn(2,1);
-        $game->takeTurn(1,0);
-        $game->takeTurn(1,2);
-        $game->takeTurn(2,0);
-
-        $this->assertEquals(null, $game->winner());
+        //O should win (first player)
+        $this->assertEquals('O', $game->winner()->getSymbol());
     }
 }
