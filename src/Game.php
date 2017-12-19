@@ -46,14 +46,27 @@ class Game {
         return false;
     }
 
-    public function isVictory() {
+    public function winner() {
+        if($this->isXWinner()) {
+            return $this->players[0];
+        }
+
+        if($this->isOWinner()) {
+            return $this->players[1];
+        }
+
+        return null;
+    }
+
+    private function isVictory() {
         return $this->winOnRows() || $this->winOnCols() || $this->winOnDiagonals();
     }
 
-    public function isXWinner() {
+    private function isXWinner() {
         return $this->isVictory() && ($this->getWinningSymbol() === 'X');
     }
-    public function isOWinner() {
+
+    private function isOWinner() {
         return $this->isVictory() && ($this->getWinningSymbol() === 'O');
     }
 
@@ -165,7 +178,7 @@ class Game {
         return false;
     }
 
-    public function getWinningSymbol() {
+    private function getWinningSymbol() {
         return $this->winningSymbol;
     }
 }

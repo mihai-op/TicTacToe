@@ -32,9 +32,7 @@ class GameTest extends TestCase {
         $this->assertFalse($game->winOnCols());
         $this->assertFalse($game->winOnMainDiagonal());
         $this->assertTrue($game->winOnSecondaryDiagonal());
-        $this->assertTrue($game->isVictory());
-        $this->assertEquals('X', $game->getWinningSymbol());
-        $this->assertTrue($game->isXWinner());
+        $this->assertEquals('X', $game->winner()->getSymbol());
     }
 
     /**
@@ -51,9 +49,7 @@ class GameTest extends TestCase {
         $this->assertFalse($game->winOnCols());
         $this->assertFalse($game->winOnMainDiagonal());
         $this->assertTrue($game->winOnSecondaryDiagonal());
-        $this->assertTrue($game->isVictory());
-        $this->assertEquals('O', $game->getWinningSymbol());
-        $this->assertTrue($game->isOWinner());
+        $this->assertEquals('O', $game->winner()->getSymbol());
     }
 
     /**
@@ -69,7 +65,7 @@ class GameTest extends TestCase {
         $game->markOnBoard(0,2);
 
         $this->assertTrue($game->winOnRows());
-        $this->assertEquals('X', $game->getWinningSymbol());
+        $this->assertEquals('X', $game->winner()->getSymbol());
     }
 
     /**
@@ -86,7 +82,7 @@ class GameTest extends TestCase {
         $game->markOnBoard(2,0);
 
         $this->assertTrue($game->winOnCols());
-        $this->assertEquals('X', $game->getWinningSymbol());
+        $this->assertEquals('X', $game->winner()->getSymbol());
     }
 
     /**
@@ -103,7 +99,7 @@ class GameTest extends TestCase {
 
         $this->assertTrue($game->winOnMainDiagonal());
         $this->assertTrue($game->winOnDiagonals());
-        $this->assertEquals('X', $game->getWinningSymbol());
+        $this->assertEquals('X', $game->winner()->getSymbol());
     }
 
     /**
@@ -121,7 +117,7 @@ class GameTest extends TestCase {
 
         $this->assertTrue($game->winOnSecondaryDiagonal());
         $this->assertTrue($game->winOnDiagonals());
-        $this->assertEquals('X', $game->getWinningSymbol());
+        $this->assertEquals('X', $game->winner()->getSymbol());
     }
     /**
      * @test
@@ -143,9 +139,7 @@ class GameTest extends TestCase {
         $this->assertFalse($game->winOnCols());
         $this->assertFalse($game->winOnMainDiagonal());
         $this->assertFalse($game->winOnSecondaryDiagonal());
-        $this->assertFalse($game->isVictory());
-        $this->assertTrue($game->isDraw());
-        $this->assertEquals(null, $game->getWinningSymbol());
+        $this->assertEquals(null, $game->winner());
     }
 
     /**
@@ -168,8 +162,6 @@ class GameTest extends TestCase {
         $this->assertFalse($game->winOnCols());
         $this->assertFalse($game->winOnMainDiagonal());
         $this->assertFalse($game->winOnSecondaryDiagonal());
-        $this->assertFalse($game->isVictory());
-        $this->assertTrue($game->isDraw());
-        $this->assertEquals(null, $game->getWinningSymbol());
+        $this->assertEquals(null, $game->winner());
     }
 }
