@@ -3,11 +3,8 @@
 use TicTacToe\Board;
 use PHPUnit\Framework\TestCase;
 use TicTacToe\Exception\ArgumentOutOfRangeException;
-use TicTacToe\Exception\WrongSymbolException;
 
 class BoardTest extends TestCase {
-
-
     /**
      * @test
      */
@@ -83,16 +80,6 @@ class BoardTest extends TestCase {
         $this->expectException(ArgumentOutOfRangeException::class);
         $board->mark(-1,0, 'X');
     }
-
-    /**
-     * @test
-     */
-    public function mark_with_wrong_symbol() {
-        $board = new Board;
-
-        $this->expectException(WrongSymbolException::class);
-        $board->mark(0,0,'Z');
-    } 
 
     /**
      * @test

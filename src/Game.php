@@ -1,7 +1,6 @@
 <?php
 
 namespace TicTacToe;
-use TicTacToe\Exception\WrongSymbolException;
 
 class Game {
     private $board;

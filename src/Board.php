@@ -2,7 +2,6 @@
 
 namespace TicTacToe;
 use TicTacToe\Exception\ArgumentOutOfRangeException;
-use TicTacToe\Exception\WrongSymbolException;
 
 class Board {
     private $table;
@@ -91,10 +90,6 @@ class Board {
     }
 
     public function mark($row, $col, $symbol) {
-        if($symbol !== 'O' && $symbol !== 'X') {
-            throw new WrongSymbolException("Symbol is not X or O.");
-        }
-
         if($row >= 0 && $row < 3 && $col >= 0 && $col < 3) {
             $this->table[$row][$col] = $symbol;
             return true;
