@@ -122,6 +122,22 @@ class Board {
         return $count;
     }
 
+    public function getAvailableTiles(): array {
+        $tiles = [];
+
+        for($row = 0; $row < 3; $row++) {
+            for($column = 0; $column < 3; $column++) {
+                $tile = new Tile($row, $column);
+
+                if($this->isTileEmpty($tile)) {
+                    $tiles[] = $tile;
+                }
+            }
+        }
+
+        return $tiles;
+    }
+
     public function mark(Tile $tile, Symbol $symbol) {
         $this->table[$tile->getRow()][$tile->getColumn()] = $symbol->getValue();
     }

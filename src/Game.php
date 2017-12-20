@@ -81,6 +81,9 @@ class Game {
         throw new IllegalDecisionException();
     }
 
+    public function getBoard() : Board {
+        return $this->board;
+    }
     //this function returns NULL both when:
     //$line = [null, null, null]
     //$line = ['X','O','X']
