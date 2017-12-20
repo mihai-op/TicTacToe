@@ -37,7 +37,7 @@ class Game {
         }
     }
 
-    public function takeTurn($tile) {
+    public function takeTurn(Tile $tile) {
         $currentPlayer = $this->getPlayerAtTurn();
 
         if($this->board->isTileEmpty($tile))  {

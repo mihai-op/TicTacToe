@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace TicTacToe;
 
 use TicTacToe\Tile;
+use TicTacToe\Symbol;
 use TicTacToe\Exception\ArgumentOutOfRangeException;
 
 class Board {
@@ -103,7 +104,7 @@ class Board {
         return true;
     }
 
-    public function isTileEmpty($tile) {
+    public function isTileEmpty(Tile $tile) {
         return $this->table[$tile->getRow()][$tile->getColumn()] == null;
     }
 
@@ -121,7 +122,7 @@ class Board {
         return $count;
     }
 
-    public function mark($tile, $symbol) {
+    public function mark(Tile $tile, Symbol $symbol) {
         $this->table[$tile->getRow()][$tile->getColumn()] = $symbol->getValue();
     }
 }
