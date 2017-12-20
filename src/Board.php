@@ -36,6 +36,16 @@ class Board {
         return $rowArray;
     }
 
+    public function getAllRows() {
+        $rows = [];
+
+        for($index = 0; $index < 3; $index++) {
+            $rows[] = $this->getRow($index);
+        }
+
+        return $rows;
+    }
+
     public function getColumn($columnIndex) {
         if($columnIndex < 0 || $columnIndex >= 3) {
             throw new ArgumentOutOfRangeException("Invalid column.");
@@ -48,6 +58,16 @@ class Board {
         }
 
         return $columnArray;
+    }
+
+    public function getAllColumns() {
+        $columns = [];
+
+        for($index = 0; $index < 3; $index++) {
+            $columns[] = $this->getRow($index);
+        }
+
+        return $columns;
     }
 
     public function getMainDiagonal() {

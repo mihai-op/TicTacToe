@@ -42,18 +42,19 @@ class Game {
     }
 
     public function winner() {
+
+        $rows = $this->board->getAllRows();
+        $columns = $this->board->getAllColumns();
+        $mainDiagonal = $this->board->getMainDiagonal();
+        $secondaryDiagonal = $this->board->getSecondaryDiagonal();
+
+        $lines = array_merge($rows, $columns, [$mainDiagonal, $secondaryDiagonal]);
+
         $lineStats = [];
 
-        for($row = 0; $row < 3; $row++) {
-            $lineStats[] = $this->sameSymbolOnLine($this->board->getRow($row));
+        foreach($lines as $line) {
+            $lineStats[] = $this->sameSymbolOnLine($line);
         }
-
-        for($column = 0; $column < 3; $column++) {
-            $lineStats[] = $this->sameSymbolOnLine($this->board->getColumn($column));
-        }
-
-        $lineStats[] = $this->sameSymbolOnLine($this->board->getMainDiagonal());
-        $lineStats[] = $this->sameSymbolOnLine($this->board->getSecondaryDiagonal());
 
         for($index = 0; $index < count($lineStats); $index++) {
             if($lineStats[$index] === $this->players[0]->getSymbol()) {
@@ -67,10 +68,10 @@ class Game {
         return null;
     }
 
-
     public function getBoard() {
         return $this->board;
     }
+
     //this function returns NULL both when:
     //$line = [null, null, null]
     //$line = ['X','O','X']
