@@ -9,36 +9,35 @@ class Game {
     public function __construct($firstPlayer, $secondPlayer, $symbols = ['X','O']) {
         $this->board = new Board;
 
+        $firstPlayer->setSymbol($symbols[0]);
+        $secondPlayer->setSymbol($symbols[1]);
+
+        $firstPlayer->setGame($this);
+        $secondPlayer->setGame($this);
+
         $this->players[0] = $firstPlayer;
         $this->players[1] = $secondPlayer;
 
-        $this->players[0]->setGame($this);
-        $this->players[1]->setGame($this);
-
-        $this->players[0]->setSymbol($symbols[0]);
-        $this->players[1]->setSymbol($symbols[1]);
-
-        $this->playerAtTurn = $this->players[0];
     }
 
 
     public function getPlayerAtTurn() {
-        return $this->playerAtTurn;
+        $count = $this->board->countEmptyTiles();
+
+        if($count % 2 == 1) {
+            return $this->players[0];
+        }
+
+        else {
+            return $this->players[1];
+        }
     }
 
     public function takeTurn($tile) {
-        $currentPlayer = $this->playerAtTurn;
+        $currentPlayer = $this->getPlayerAtTurn();
 
         if($this->board->isTileEmpty($tile))  {
-            $this->playerAtTurn->markTile($tile, $currentPlayer->getSymbol());
-
-            //I need to find a better way to compare objects
-            if($this->playerAtTurn->getSymbol() === $this->players[0]->getSymbol()) {
-                $this->playerAtTurn = $this->players[1];
-            }
-            else {
-                $this->playerAtTurn = $this->players[0];
-            }
+            $currentPlayer->markTile($tile, $currentPlayer->getSymbol());
         }
     }
 

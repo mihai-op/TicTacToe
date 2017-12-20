@@ -86,6 +86,20 @@ class Board {
         return $this->table[$tile->getRow()][$tile->getColumn()] == null;
     }
 
+    public function countEmptyTiles() {
+        $count = 0;
+
+        for($rowIndex = 0; $rowIndex < 3; $rowIndex++) {
+            for($columnIndex = 0; $columnIndex < 3; $columnIndex++) {
+                if($this->isTileEmpty(new Tile($rowIndex, $columnIndex))) {
+                    $count++;
+                }
+            }
+        }
+
+        return $count;
+    }
+
     public function mark($tile, $symbol) {
         $this->table[$tile->getRow()][$tile->getColumn()] = $symbol;
     }
