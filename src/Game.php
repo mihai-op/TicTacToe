@@ -41,7 +41,7 @@ class Game {
         $currentPlayer = $this->getPlayerAtTurn();
 
         if($this->board->isTileEmpty($tile))  {
-            $currentPlayer->markTile($tile, $currentPlayer->getSymbol());
+            $currentPlayer->markTile($tile);
         }
     }
 

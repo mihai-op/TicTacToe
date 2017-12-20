@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace TicTacToe;
 
+use TicTacToe\Symbol;
+use TicTacToe\Tile;
+use TicTacToe\Game;
+
 class Player {
     private $symbol;
     private $game;
@@ -11,7 +15,7 @@ class Player {
         //nothing here yet
     }
 
-    public function setSymbol(\TicTacToe\Symbol $symbol) {
+    public function setSymbol(Symbol $symbol) {
         $this->symbol = $symbol;
     }
 
@@ -23,11 +27,11 @@ class Player {
         return $this->game;
     }
 
-    public function setGame(\TicTacToe\Game $game) {
+    public function setGame(Game $game) {
         $this->game = $game;
     }
 
-    public function markTile($row, $column) {
-        $this->game->getBoard()->mark($row, $column, $this->symbol);
+    public function markTile(Tile $tile) {
+        $this->game->getBoard()->mark($tile, $this->symbol);
     }
 }
