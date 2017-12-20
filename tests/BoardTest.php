@@ -1,11 +1,14 @@
 <?php
+declare(strict_types=1);
 
 use TicTacToe\Board;
 use TicTacToe\Tile;
+use TicTacToe\Symbol;
 use PHPUnit\Framework\TestCase;
 use TicTacToe\Exception\ArgumentOutOfRangeException;
 
 class BoardTest extends TestCase {
+
     /**
      * @test
      */
@@ -14,7 +17,7 @@ class BoardTest extends TestCase {
 
         for($row = 0; $row < 3; $row++) {
             for($col = 0; $col < 3; $col++) {
-                $board->mark(new Tile($row, $col), 'X');
+                $board->mark(new Tile($row, $col), new Symbol('X'));
             }
         }
 
@@ -88,9 +91,11 @@ class BoardTest extends TestCase {
     public function mark_and_verify_first_row() {
         $board = new Board;
 
-        $board->mark(new Tile(0,0), 'X');
-        $board->mark(new Tile(0,1), 'O');
-        $board->mark(new Tile(0,2), 'X');
+        $symbolX = new Symbol('X');
+        $symbolO = new Symbol('O');
+        $board->mark(new Tile(0,0), $symbolX);
+        $board->mark(new Tile(0,1), $symbolO);
+        $board->mark(new Tile(0,2), $symbolX);
 
         $firstRow = $board->getRow(0);
 
@@ -103,9 +108,11 @@ class BoardTest extends TestCase {
     public function mark_and_verify_first_column() {
         $board = new Board;
 
-        $board->mark(new Tile(0,0), 'X');
-        $board->mark(new Tile(1,0), 'O');
-        $board->mark(new Tile(2,0), 'X');
+        $symbolX = new Symbol('X');
+        $symbolO = new Symbol('O');
+        $board->mark(new Tile(0,0), $symbolX);
+        $board->mark(new Tile(1,0), $symbolO);
+        $board->mark(new Tile(2,0), $symbolX);
 
         $firstColumn = $board->getColumn(0);
 
@@ -118,9 +125,11 @@ class BoardTest extends TestCase {
     public function mark_and_verify_main_diagonal() {
         $board = new Board;
 
-        $board->mark(new Tile(0,0), 'X');
-        $board->mark(new Tile(1,1), 'O');
-        $board->mark(new Tile(2,2), 'X');
+        $symbolX = new Symbol('X');
+        $symbolO = new Symbol('O');
+        $board->mark(new Tile(0,0), $symbolX);
+        $board->mark(new Tile(1,1), $symbolO);
+        $board->mark(new Tile(2,2), $symbolX);
 
         $mainDiag = $board->getMainDiagonal();
 
@@ -133,9 +142,11 @@ class BoardTest extends TestCase {
     public function mark_and_verify_secondary_diagonal() {
         $board = new Board;
 
-        $board->mark(new Tile(0,2), 'X');
-        $board->mark(new Tile(1,1), 'O');
-        $board->mark(new Tile(2,0), 'X');
+        $symbolX = new Symbol('X');
+        $symbolO = new Symbol('O');
+        $board->mark(new Tile(0,2), $symbolX);
+        $board->mark(new Tile(1,1), $symbolO);
+        $board->mark(new Tile(2,0), $symbolX);
 
         $secondaryDiagonal = $board->getSecondaryDiagonal();
         $this->assertEquals(['X','O','X'], $secondaryDiagonal);

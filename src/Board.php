@@ -121,6 +121,6 @@ class Board {
     }
 
     public function mark($tile, $symbol) {
-        $this->table[$tile->getRow()][$tile->getColumn()] = $symbol;
+        $this->table[$tile->getRow()][$tile->getColumn()] = $symbol->getValue();
     }
 }

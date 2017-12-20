@@ -1,23 +1,26 @@
 <?php
+declare(strict_types=1);
 
 namespace TicTacToe;
+use TicTacToe\Player;
+use TicTacToe\Symbol;
+use TicTacToe\Board;
 
 class Game {
     private $board;
-    private $players;
+    private $players = [];
 
-    public function __construct($firstPlayer, $secondPlayer, $symbols = ['X','O']) {
+    public function __construct(Player $firstPlayer, Player $secondPlayer) {
         $this->board = new Board;
 
-        $firstPlayer->setSymbol($symbols[0]);
-        $secondPlayer->setSymbol($symbols[1]);
+        $firstPlayer->setSymbol(new Symbol('X'));
+        $secondPlayer->setSymbol(new Symbol('O'));
 
         $firstPlayer->setGame($this);
         $secondPlayer->setGame($this);
 
         $this->players[0] = $firstPlayer;
         $this->players[1] = $secondPlayer;
-
     }
 
 
@@ -57,10 +60,10 @@ class Game {
         }
 
         for($index = 0; $index < count($lineStats); $index++) {
-            if($lineStats[$index] === $this->players[0]->getSymbol()) {
+            if($lineStats[$index] === $this->players[0]->getSymbol()->getValue()) {
                 return $this->players[0];
             }
-            else if($lineStats[$index] === $this->players[1]->getSymbol()) {
+            else if($lineStats[$index] === $this->players[1]->getSymbol()->getValue()) {
                 return $this->players[1];
             }
         }

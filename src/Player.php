@@ -10,7 +10,7 @@ class Player {
         //nothing here yet
     }
 
-    public function setSymbol($symbol) {
+    public function setSymbol(\TicTacToe\Symbol $symbol) {
         $this->symbol = $symbol;
     }
 
@@ -18,11 +18,11 @@ class Player {
         return $this->symbol;
     }
 
-    public function getGame($game) {
+    public function getGame() {
         return $this->game;
     }
 
-    public function setGame($game) {
+    public function setGame(\TicTacToe\Game $game) {
         $this->game = $game;
     }
 
