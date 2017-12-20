@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use PHPUnit\FrameWork\TestCase;
+use TicTacToe\Exception\WrongSymbolException;
 
 class SymbolTest extends TestCase
 {
@@ -14,6 +15,18 @@ class SymbolTest extends TestCase
 
         $symbol = new \TicTacToe\Symbol('O');
         $this->assertEquals('O', $symbol->getValue());
+    }
+
+    public function get_wrong_symbol() {
+        $this->expectException(WrongSymbolException::class);
+
+        $someSymbol = 'Z';
+        $this->expectExceptionMessage(
+                "$someSymbol cannot be used for a symbol." .
+                "Only X or O can be used for a symbol."
+            );
+        
+        $symbol = new \TicTacToe\Symbol($someSymbol);
     }
 }
 
