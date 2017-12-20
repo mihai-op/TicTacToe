@@ -25,7 +25,7 @@ class Game {
     }
 
 
-    public function getPlayerAtTurn() {
+    public function getPlayerAtTurn() : Player {
         $count = $this->board->countEmptyTiles();
 
         if($count % 2 == 1) {
@@ -37,16 +37,7 @@ class Game {
         }
     }
 
-    public function takeTurn(Tile $tile) {
-        $currentPlayer = $this->getPlayerAtTurn();
-
-        if($this->board->isTileEmpty($tile))  {
-            $currentPlayer->markTile($tile);
-        }
-    }
-
     public function winner() {
-
         $rows = $this->board->getAllRows();
         $columns = $this->board->getAllColumns();
         $mainDiagonal = $this->board->getMainDiagonal();
@@ -72,8 +63,22 @@ class Game {
         return null;
     }
 
-    public function getBoard() {
-        return $this->board;
+    public function validateDecision() : bool {
+        $decision = $this->getPlayerAtTurn()->getTileDecision();
+        return  $decision !== null && $this->board->isTileEmpty($decision);
+    }
+
+    public function executeDecision() {
+
+        if($this->validateDecision()) {
+            $decision = $this->getPlayerAtTurn()->getTileDecision();
+            $symbol = $this->getPlayerAtTurn()->getSymbol();
+            $this->board->mark($decision, $symbol);
+
+            return;
+        }
+
+        throw new IllegalDecisionException();
     }
 
     //this function returns NULL both when:
