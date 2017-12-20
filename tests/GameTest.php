@@ -3,9 +3,9 @@
 use PHPUnit\Framework\TestCase;
 use TicTacToe\Game;
 use TicTacToe\Player;
+use TicTacToe\Tile;
 
 class GameTest extends TestCase {
-
     public $game;
     public $players;
 
@@ -31,11 +31,11 @@ class GameTest extends TestCase {
         $game = &$this->game;
 
         $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
-        $this->game->takeTurn(1,1);
+        $this->game->takeTurn(new Tile(1,1));
         $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
-        $this->game->takeTurn(0,0);
+        $this->game->takeTurn(new Tile(0,0));
         $this->assertEquals('X', $game->getPlayerAtTurn()->getSymbol());
-        $this->game->takeTurn(2,2);
+        $this->game->takeTurn(new Tile(2,2));
         $this->assertEquals('O', $game->getPlayerAtTurn()->getSymbol());
     }
 
@@ -46,7 +46,7 @@ class GameTest extends TestCase {
         $game = &$this->game;
 
         for($index = 0; $index < 7; $index++) {
-            $game->takeTurn($index / 3, $index % 3);
+            $game->takeTurn(new Tile($index / 3, $index % 3));
         }
 
         $this->assertEquals('X', $game->winner()->getSymbol());
@@ -58,15 +58,15 @@ class GameTest extends TestCase {
     public function test_draw() {
         $game = &$this->game;
 
-        $game->takeTurn(1,1);
-        $game->takeTurn(0,0);
-        $game->takeTurn(2,2);
-        $game->takeTurn(0,2);
-        $game->takeTurn(0,1);
-        $game->takeTurn(2,1);
-        $game->takeTurn(1,0);
-        $game->takeTurn(1,2);
-        $game->takeTurn(2,0);
+        $game->takeTurn(new Tile(1,1));
+        $game->takeTurn(new Tile(0,0));
+        $game->takeTurn(new Tile(2,2));
+        $game->takeTurn(new Tile(0,2));
+        $game->takeTurn(new Tile(0,1));
+        $game->takeTurn(new Tile(2,1));
+        $game->takeTurn(new Tile(1,0));
+        $game->takeTurn(new Tile(1,2));
+        $game->takeTurn(new Tile(2,0));
 
         $this->assertEquals(null, $game->winner());
     }
@@ -77,12 +77,12 @@ class GameTest extends TestCase {
     public function win_for_second_player() {
         $game = &$this->game;
 
-        $game->takeTurn(0,1);
-        $game->takeTurn(0,0);
-        $game->takeTurn(1,2);
-        $game->takeTurn(1,1);
-        $game->takeTurn(2,1);
-        $game->takeTurn(2,2);
+        $game->takeTurn(new Tile(0,1));
+        $game->takeTurn(new Tile(0,0));
+        $game->takeTurn(new Tile(1,2));
+        $game->takeTurn(new Tile(1,1));
+        $game->takeTurn(new Tile(2,1));
+        $game->takeTurn(new Tile(2,2));
 
         $this->assertEquals('O', $game->winner()->getSymbol());
     }
@@ -94,7 +94,7 @@ class GameTest extends TestCase {
         $game = new Game(new Player(), new Player(), ['O','X']);
 
         for($index = 0; $index < 7; $index++) {
-            $game->takeTurn($index / 3, $index % 3);
+            $game->takeTurn(new Tile($index / 3, $index % 3));
         }
 
         //O should win (first player)

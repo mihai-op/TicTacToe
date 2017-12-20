@@ -1,6 +1,8 @@
 <?php
 
 namespace TicTacToe;
+
+use TicTacToe\Tile;
 use TicTacToe\Exception\ArgumentOutOfRangeException;
 
 class Board {
@@ -80,21 +82,11 @@ class Board {
         return true;
     }
 
-    public function isCellEmpty($rowIndex, $columnIndex) {
-        if($rowIndex < 0 || $rowIndex >= 3 || 
-            $columnIndex < 0 || $columnIndex >= 3) {
-            throw new ArgumentOutOfRangeException("Invalid row or column.");
-        }
-
-        return $this->table[$rowIndex][$columnIndex] == null;
+    public function isTileEmpty($tile) {
+        return $this->table[$tile->getRow()][$tile->getColumn()] == null;
     }
 
-    public function mark($row, $col, $symbol) {
-        if($row >= 0 && $row < 3 && $col >= 0 && $col < 3) {
-            $this->table[$row][$col] = $symbol;
-            return true;
-        }
-
-        throw new ArgumentOutOfRangeException("Invalid row or column.");
+    public function mark($tile, $symbol) {
+        $this->table[$tile->getRow()][$tile->getColumn()] = $symbol;
     }
 }

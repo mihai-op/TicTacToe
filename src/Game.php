@@ -29,11 +29,11 @@ class Game {
         return $this->playerAtTurn;
     }
 
-    public function takeTurn($row, $column) {
+    public function takeTurn($tile) {
         $currentPlayer = $this->playerAtTurn;
 
-        if($this->board->isCellEmpty($row, $column))  {
-            $this->playerAtTurn->markTile($row, $column, $currentPlayer->getSymbol());
+        if($this->board->isTileEmpty($tile))  {
+            $this->playerAtTurn->markTile($tile, $currentPlayer->getSymbol());
 
             //I need to find a better way to compare objects
             if($this->playerAtTurn->getSymbol() === $this->firstPlayer->getSymbol()) {
