@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace TicTacToe;
+
 use TicTacToe\Player;
 use TicTacToe\Symbol;
 use TicTacToe\Board;

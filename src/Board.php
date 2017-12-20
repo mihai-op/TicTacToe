@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TicTacToe;
 
@@ -6,7 +7,7 @@ use TicTacToe\Tile;
 use TicTacToe\Exception\ArgumentOutOfRangeException;
 
 class Board {
-    private $table;
+    private $table = [];
 
     public function __construct() {
         $this->clear();
